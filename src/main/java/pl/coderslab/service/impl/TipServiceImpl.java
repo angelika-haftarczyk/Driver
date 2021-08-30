@@ -36,8 +36,7 @@ public class TipServiceImpl implements TipService {
     public TipDto addTip(TipDto tipDto) {
         Tip tip = fromDto(tipDto);
         tip = tipRepository.save(tip);
-        TipDto result = toDto(tip);
-        return result;
+        return toDto(tip);
     }
 
     @Override
@@ -49,8 +48,7 @@ public class TipServiceImpl implements TipService {
     public TipDto editTip(TipDto tipDto) {
         Tip tip = fromDto(tipDto);
         tip = tipRepository.save(tip);
-        TipDto result = toDto(tip);
-        return result;
+        return toDto(tip);
     }
 
     private Tip fromDto(TipDto tipDto) {
@@ -67,8 +65,10 @@ public class TipServiceImpl implements TipService {
         List<Tag> tags = tipDto.getTags().stream().map(tagService::getTagByName).collect(Collectors.toList());
         tip.setTag(tags);
         tip.setVideoUrl(tipDto.getVideoUrl());
-        FileInfo fileInfo = fileInfoRepository.findByFileName(tipDto.getFileName());
-        tip.setFileInfo(fileInfo);
+        if(tipDto.getFileName() != null){
+            FileInfo fileInfo = fileInfoRepository.findByFileName(tipDto.getFileName());
+            tip.setFileInfo(fileInfo);
+        }
         return tip;
     }
 
@@ -82,7 +82,9 @@ public class TipServiceImpl implements TipService {
         List<String> tags = tip.getTag().stream().filter(Objects::nonNull).map(Tag::getName).collect(Collectors.toList());
         tipDto.setTags(tags);
         tipDto.setVideoUrl(tip.getVideoUrl());
-        tipDto.setFileName(tip.getFileInfo().getFileName());
+        if(tip.getFileInfo() != null) {
+            tipDto.setFileName(tip.getFileInfo().getFileName());
+        }
         return tipDto;
     }
 }
