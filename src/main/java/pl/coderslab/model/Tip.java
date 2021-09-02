@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class Tip extends BaseEntity {
     @ManyToMany
     private List<Tag> tag;
 
-    @ManyToOne
-    private Quiz quiz;
+    @OneToMany
+    private List<QuizQuestion> quizQuestions;
 
     private String videoUrl;
     @ManyToOne
