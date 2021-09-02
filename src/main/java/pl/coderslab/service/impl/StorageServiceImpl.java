@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Service
 public class StorageServiceImpl implements StorageService {
@@ -38,15 +39,22 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public String store(MultipartFile multipartFile) throws IOException {
-        String fileName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMDDHHmmssS"));
-        File file = new File(PATH + fileName).getAbsoluteFile();
+        LocalDateTime dateTime = LocalDateTime.now();
+        String folderName = dateTime.format(DateTimeFormatter.ofPattern("yyyy.MM"));
+        File folder = new File(PATH + folderName);
+        if(!folder.exists()) {
+            folder.mkdir();
+        }
+        String fileName = UUID.randomUUID().toString();
+        String fullName = folderName + "/" + fileName;
+        File file = new File(PATH + fullName).getAbsoluteFile();
         multipartFile.transferTo(file);
         FileInfo fileInfo = new FileInfo();
         fileInfo.setOriginalFileName(multipartFile.getOriginalFilename());
-        fileInfo.setFileName(file.getName());
+        fileInfo.setFileName(fullName);
         fileInfo.setContentType(multipartFile.getContentType());
         fileInfoRepository.save(fileInfo);
-        return fileName;
+        return fullName;
     }
 
     @Override

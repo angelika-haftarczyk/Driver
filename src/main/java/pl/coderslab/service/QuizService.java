@@ -9,4 +9,5 @@ public interface QuizService {
     void deleteQuiz(Long id);
     List<QuizDto> findAll();
     List<QuizDto> findByTipId(Long id);
+    QuizDto editQuiz(QuizDto quizDto);
 }

@@ -26,7 +26,7 @@ public class TipController {
     }
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public TipDto add(TipDto tipDto, @RequestParam("file") MultipartFile file) throws IOException {
+    public TipDto add(TipDto tipDto, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         if(file != null && !file.isEmpty()) {
             String store = storageService.store(file);
             tipDto.setFileName(store);

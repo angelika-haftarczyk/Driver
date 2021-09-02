@@ -1,6 +1,6 @@
 package pl.coderslab.service;
 
-import org.springframework.core.io.Resource;
+
 import org.springframework.web.multipart.MultipartFile;
 import pl.coderslab.model.dto.FileInfoDto;
 

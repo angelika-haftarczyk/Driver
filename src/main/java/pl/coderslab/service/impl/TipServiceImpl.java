@@ -11,6 +11,7 @@ import pl.coderslab.repository.TipRepository;
 import pl.coderslab.service.TagService;
 import pl.coderslab.service.TipService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -62,8 +63,13 @@ public class TipServiceImpl implements TipService {
         tip.setTitle(tipDto.getTitle());
         tip.setDescription(tipDto.getDescription());
         tip.setNumberOfRecommend(tipDto.getNumberOfRecommend());
-        List<Tag> tags = tipDto.getTags().stream().map(tagService::getTagByName).collect(Collectors.toList());
-        tip.setTag(tags);
+        if(tipDto.getTags() != null && !tipDto.getTags().isEmpty()) {
+            List<Tag> tags = tipDto.getTags().stream().filter(Objects::nonNull).map(tagService::getTagByName)
+                    .filter(Objects::nonNull).collect(Collectors.toList());
+            tip.setTag(tags);
+        } else {
+            tip.setTag(new ArrayList<>());
+        }
         tip.setVideoUrl(tipDto.getVideoUrl());
         if(tipDto.getFileName() != null){
             FileInfo fileInfo = fileInfoRepository.findByFileName(tipDto.getFileName());

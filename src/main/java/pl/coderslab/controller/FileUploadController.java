@@ -25,11 +25,11 @@ public class FileUploadController {
     private StorageService storageService;
 
 
-    @GetMapping("/files/{filename:.+}")
+    @GetMapping("/files/{folder}/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+    public ResponseEntity<Resource> serveFile(@PathVariable String folder, @PathVariable String filename) {
 
-        FileInfoDto fileInfoDto = storageService.loadAsResource(filename);
+        FileInfoDto fileInfoDto = storageService.loadAsResource(folder+"/"+filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + fileInfoDto.getOriginalFileName() + "\"")
                 .contentType(MediaType.valueOf(fileInfoDto.getContentType()))
@@ -37,8 +37,7 @@ public class FileUploadController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file,
-                                         RedirectAttributes redirectAttributes) throws IOException {
+    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
 
         return ResponseEntity.ok().body(storageService.store(file));
     }
