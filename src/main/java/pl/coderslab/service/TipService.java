@@ -1,6 +1,5 @@
 package pl.coderslab.service;
 
-import pl.coderslab.model.Tip;
 import pl.coderslab.model.dto.TipDto;
 
 import java.util.List;

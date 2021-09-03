@@ -1,6 +1,7 @@
 package pl.coderslab.controller;
 
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -9,13 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.coderslab.exception.StorageFileNotFoundException;
 import pl.coderslab.model.dto.FileInfoDto;
 import pl.coderslab.service.StorageService;
 
 import java.io.IOException;
-
 
 @Controller
 @RequestMapping("/api/file")
@@ -25,6 +24,7 @@ public class FileUploadController {
     private StorageService storageService;
 
 
+    @ApiOperation(value = "Pokaż wybrane zdjęcie", notes = "Wporwadź scieżkę zdjęcia")
     @GetMapping("/files/{folder}/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String folder, @PathVariable String filename) {
@@ -36,6 +36,7 @@ public class FileUploadController {
                 .body(fileInfoDto.getFile());
     }
 
+    @ApiOperation(value="Wybierz zdjęcie")
     @PostMapping("/")
     public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
 

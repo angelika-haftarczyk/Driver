@@ -1,12 +1,13 @@
 package pl.coderslab.controller;
 
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 import pl.coderslab.model.dto.QuizDto;
-import pl.coderslab.model.dto.TipDto;
 import pl.coderslab.service.QuizService;
 import pl.coderslab.service.StorageService;
 
@@ -23,6 +24,7 @@ public class QuizController {
     @Autowired
     private StorageService storageService;
 
+    @ApiOperation(value = "Dodawanie quizu", notes = "Wprowadź nowy quiz")
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public QuizDto add(QuizDto quizDto,
                        @RequestParam(value = "quizFile", required = false) MultipartFile quizFile,
@@ -48,21 +50,25 @@ public class QuizController {
         return quizService.addQuiz(quizDto);
     }
 
+    @ApiOperation(value = "Usuwanie quizu", notes = "Wybierz quiz do usunięcia po id")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable Long id) {
+    public void delete(@ApiParam(value = "unikalne id Quizu") @PathVariable Long id) {
         quizService.deleteQuiz(id);
     }
 
+    @ApiOperation(value = "Pokaż wszystkie quziy", notes = "Widzimy wszystkie quziy")
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<QuizDto> getAll() {
         return quizService.findAll();
     }
 
+    @ApiOperation(value = "Pokaż Quziy związene z daną poradą", notes = "Wproawdź ID porady, żeby zobaczyć interesujące Cię quziy")
     @RequestMapping(value = "/byTip/{id}", method = RequestMethod.GET)
     public List<QuizDto> getByTipId(@PathVariable Long id) {
         return quizService.findByTipId(id);
     }
 
+    @ApiOperation(value = "Edycja quziu", notes = "Edycja quziu wymaga wprowadzenia ID")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public QuizDto edit(QuizDto quizDto) {
         return quizService.editQuiz(quizDto);
